@@ -4,8 +4,8 @@
 
 # Protótipo
 
-* Link: http://px-boleto-redirect.pxproject.com.br
-* Vídeo: http://px-boleto-redirect.pxproject.com.br/video.html
+* Link: http://boleto-redirect.pxproject.com.br
+* Vídeo: http://boleto-redirect.pxproject.com.br/video.html
 
 [license-image]: https://img.shields.io/github/license/mashape/apistatus.svg?style=flat
 [license-url]: LICENSE
