@@ -1,0 +1,5 @@
+node_modules/
+src/lib/
+src/build/
+.vscode
+debug.log

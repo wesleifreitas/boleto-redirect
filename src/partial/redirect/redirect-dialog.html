@@ -1,0 +1,42 @@
+<md-dialog flex="85" aria-label="" ng-cloak ng-init="vm.init()" class="redirect-dialog">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Redirecionar boletos :)</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.close()">
+                <i class="fa fa-close"></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-content class="content" flex>
+            <md-table-container>
+                <table md-table md-row-select="true" multiple="true" ng-model="vm.example.selected" md-progress="vm.example.promise">
+                    <thead md-head md-order="vm.example.order">
+                        <tr md-row>
+                            <th md-column><span></span></th>
+                            <th md-column md-order-by="NOME"><span>Nome</span></th>
+                            <th md-column md-order-by="CPF"><span>CPF</span></th>
+                            <th md-column md-order-by="EMAIL">E-mail</th>
+                            <th md-column md-order-by="CODIGOBARRA">Código de barras</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="item" md-select-id="_ID" ng-repeat="item in vm.example.data | orderBy: vm.example.order | limitTo: vm.example.limit: (vm.example.page - 1) * vm.example.limit">
+                            <td md-cell>
+                                <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                            </td>
+                            <td md-cell>{{item.NOME}}</td>
+                            <td md-cell nowrap>{{item.CPF | brCpf}}</td>
+                            <td md-cell nowrap>{{item.EMAIL}}</td>
+                            <td md-cell>{{item.CODIGOBARRA}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+        </md-content>
+        <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.example.limit" md-page="vm.example.page" md-total="{{vm.example.total}}" md-page-select md-on-paginate="vm.example.pagination"></md-table-pagination>
+    </md-dialog-content>
+</md-dialog>
