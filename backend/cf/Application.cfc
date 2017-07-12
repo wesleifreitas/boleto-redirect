@@ -3,7 +3,7 @@
     hint="I define the application and root-level event handlers.">
 
     <!--- Define application settings. --->
-    <cfset THIS.Name = "px-project-a1" />    
+    <cfset THIS.Name = "px-boleto-redirect" />    
     <cfset THIS.ApplicationTimeout = CreateTimeSpan( 0, 8, 0, 0 ) />
     <cfset THIS.SessionManagement = true />
     <!--- <cfset THIS.SessionTimeout = CreateTimeSpan( 0, 0, 40, 0 ) /> --->

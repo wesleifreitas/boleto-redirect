@@ -20,51 +20,44 @@
 
         <cftry>
         
-            <cfset myQuery = QueryNew("grupo_id, user_id, user_name, user_password", "Integer, VarChar, VarChar, VarChar")> 
-            <cfset newRow = QueryAddRow(myQuery, 2)> 
-
-            <cfset temp = QuerySetCell(myQuery, "grupo_id", "1", 1)> 
-            <cfset temp = QuerySetCell(myQuery, "user_id", "1", 1)> 
-            <cfset temp = QuerySetCell(myQuery, "user_name", "admin", 1)> 
-            <cfset temp = QuerySetCell(myQuery, "user_password", hash("admin", "SHA-512"), 1)>
-
-            <cfset temp = QuerySetCell(myQuery, "grupo_id", "1", 2)> 
-            <cfset temp = QuerySetCell(myQuery, "user_id", "2", 2)> 
-            <cfset temp = QuerySetCell(myQuery, "user_name", "user", 2)> 
-            <cfset temp = QuerySetCell(myQuery, "user_password", hash("123", "SHA-512"), 2)>
-
-            <cfquery dbtype="query" name="qLogin">  
+            <cfquery datasource="#application.datasource#" name="qLogin">  
                 SELECT 
-                    user_id
-                    ,user_name
-                    ,user_password 
+                    usu_id
+                    ,usu_nome
+                    ,usu_senha 
+                    ,per_developer
                     ,grupo_id
-                    ,1 AS per_id
-                    ,'' AS perfil_grupo
-                    ,'' AS perfil_grupo_query
+                    ,per_id
+                    ,'' as perfil_grupo
+                    ,'' as perfil_grupo_query
                 FROM 
-                    myQuery 
+                    dbo.vw_usuario
                 WHERE 
-                    user_name = <cfqueryparam value="#body.username#" cfsqltype="cf_sql_varchar">
-                AND user_password = <cfqueryparam value="#hash(body.password, 'SHA-512')#" cfsqltype="cf_sql_varchar">
-            </cfquery>
+                    usu_login = <cfqueryparam value="#body.username#" cfsqltype="cf_sql_varchar">
+                AND usu_senha = <cfqueryparam value="#hash(body.password, 'SHA-512')#" cfsqltype="cf_sql_varchar">
+            </cfquery> 
 
             <cfif qLogin.recordCount GT 0>
 
                 <!--- perfil_grupo - Start --->            
-                <cfset qPerfilGrupo = QueryNew("grupo_id, grupo_nome", "Integer, VarChar")> 
-                <cfset newRow = QueryAddRow(qPerfilGrupo, 1)> 
-
-                <cfset temp = QuerySetCell(qPerfilGrupo, "grupo_id", "1", 1)> 
-                <cfset temp = QuerySetCell(qPerfilGrupo, "grupo_nome", "px-project", 1)> 
-
+                <cfquery datasource="#application.datasource#" name="qPerfilGrupo">
+                    SELECT
+                        grupo_id                  
+                    FROM
+                        dbo.perfil_grupo
+                    WHERE
+                        grupo_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qLogin.grupo_id#">
+                    AND	per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qLogin.per_id#">
+                    ORDER BY
+                        grupo_id
+                </cfquery>		
                 <cfset perfil_grupo = arrayNew(1)>
                 <cfloop query="qPerfilGrupo">
                     <cfset arrayAppend(perfil_grupo, qPerfilGrupo.grupo_id)>
                 </cfloop>		
                 <cfset qLogin.perfil_grupo = arrayToList(perfil_grupo)>
                 <cfset qLogin.perfil_grupo_query = QueryToArray(qPerfilGrupo)>	
-                <!--- perfil_grupo - End --->
+                <!--- perfil_grupo - End ---> 
 
                 <!--- acesso - Start --->
                 <cfquery datasource="#application.datasource#" name="qAcesso">
@@ -88,14 +81,13 @@
 
                 <cfset response["success"] = true>
                 <cfset response["message"] = "">
-                
                 <cfif body.setSession>
                     <cflock timeout="20" throwontimeout="No" type="EXCLUSIVE" scope="session">
                         <cfset session.authenticated = true>					
-                        <cfset session.userId = qLogin.user_id>
-                        <cfset session.userName = qLogin.user_name>   
-                        <cfset session.perfilDeveloper = 1>    
-                        <cfset session.grupoId = qLogin.grupo_id> 
+                        <cfset session.userId = qLogin.usu_id>
+                        <cfset session.userName = qLogin.usu_nome>   
+                        <cfset session.perfilDeveloper = qLogin.per_developer>    
+                        <cfset session.grupoId = qLogin.grupo_id>    
                         <cfset session.grupoList = qLogin.perfil_grupo>
                         <cfset session.perfilId = qLogin.per_id>
                         <cfset session.acesso = arrayToList(acesso)>                           
