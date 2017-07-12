@@ -15,6 +15,7 @@
             'idf.br-filters',
             'ng-currency',
             'md.data.table',
+            'fixed.table.header',
             'angular-loading-bar',
             'flow'
         ])
