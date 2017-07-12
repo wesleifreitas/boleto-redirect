@@ -1,12 +1,18 @@
 {
   "name": "px-boleto-redirect",
   "version": "0.0.0",
+  "homepage": "https://github.com/wesleifreitas/px-boleto-redirect",
   "private": true,
+  "authors": [
+    "Weslei Freitas <weslei.rfreitas@gmail.com>"
+  ],
+  "description": "",
   "main": "src/app.js",
   "moduleType": [
     "amd",
     "globals"
   ],
+  "keywords": [],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -31,6 +37,7 @@
     "angular-input-masks": "~2.5.0",
     "numeral": "~1.5.3",
     "angular-material-data-table": "~0.10.10",
+    "angular-fixed-table-header": "https://github.com/wesleifreitas/fixed-table-header.git#develop",
     "angular-loading-bar": "^0.9.0",
     "ng-currency": "^1.1.6",
     "angular-br-filters": "^0.7.0",
@@ -39,10 +46,10 @@
     "font-awesome": "~4.7.0",
     "angular-ui-mask": "~1.8.7",
     "jquery": "~3.2.1",
-    "ng-flow": "^2.7.4"
+    "angular-material-sidemenu": "https://github.com/wesleifreitas/angular-material-sidemenu.git#develop",
+    "ng-flow": "^2.7.7"
   },
   "resolutions": {
-    "bootstrap": "~3",
     "jstree": "^3.3.3"
   }
 }

@@ -4,10 +4,15 @@
 @import "lib/font-awesome/less/font-awesome.less";
 @import (inline) "lib/angular-material-data-table/dist/md-data-table.min.css";
 @import "assets/jstree/themes/proton/style.less";
+@import (inline) "lib/angular-material-sidemenu/dest/angular-material-sidemenu.css";
 @fa-font-path: "lib/font-awesome/fonts";
 @icon-font-path: "lib/bootstrap/fonts/";
 @import "partial/login/login.less";
 @import "partial/home/home.less";
+@import "partial/perfil-usuario/perfil-usuario.less";
+@import "partial/perfil-usuario/grupo-form.less";
+@import "partial/perfil-usuario/perfil-form.less";
+@import "partial/perfil-usuario/usuario-form.less";
 @import "partial/example/example.less";
 @import "partial/example/example-form.less";
 @import "partial/redirect/redirect.less";
@@ -17,28 +22,48 @@ body, html {
 	height: 100%;
 }
 
-body {	
+body {
+	background: url('./assets/img/wallpaper/px-example-q70.jpg') no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
-	background-color:#EFEFE7;
+	background-color: white;
 	.myApp-views {
 		height: 100%;
 	}
 }
 
-px-nav-bar md-menu-bar button {
-	color: #FFFFFF;
+nav-bar md-menu-bar button {
+	color: #E1E3F3;
 	font-size: 17px;
 }
 
-px-nav-bar md-menu-bar.md-default-theme md-menu.md-open > button, md-menu-bar md-menu.md-open > button, md-menu-bar.md-default-theme md-menu > button:focus, md-menu-bar md-menu > button:focus {
+nav-bar md-menu-bar.md-default-theme md-menu.md-open > button, md-menu-bar md-menu.md-open > button, md-menu-bar.md-default-theme md-menu > button:focus, md-menu-bar md-menu > button:focus {
 	color: #000000;
 }
 
 md-menu-content.md-menu-bar-menu.md-dense .md-button span {
 	font-size: 17px;
+}
+
+table.clone thead tr:last-child th {
+	border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+}
+
+table.clone + md-table-container table tbody tr:first-child td {
+	border-top: block;
+}
+
+md-table-container.fix-head {
+	width: 100%;
+	min-height: 300px;
+	height: 100%;
+	.overflow {
+		background-color: white;
+		overflow: auto;
+		height: 100%;
+	}
 }
 
 .ng-invalid {
@@ -75,24 +100,46 @@ md-menu-content.md-menu-bar-menu.md-dense .md-button span {
 }
 
 #loading-bar .bar {
-  background: #EF732B;
-}	
-#loading-bar-spinner .spinner-icon {
-  border-top-color:  #EF732B;
-  border-left-color: #EF732B;
-}
-#loading-bar .peg {
-  -moz-box-shadow: #EF732B 1px 0 6px 1px;
-  -ms-box-shadow: #EF732B 1px 0 6px 1px;
-  -webkit-box-shadow: #EF732B 1px 0 6px 1px;
-  box-shadow: #EF732B 1px 0 6px 1px;
+	background: #EF732B;
 }
 
-md-content{
+#loading-bar-spinner .spinner-icon {
+	border-top-color: #EF732B;
+	border-left-color: #EF732B;
+}
+
+#loading-bar .peg {
+	-moz-box-shadow: #EF732B 1px 0 6px 1px;
+	-ms-box-shadow: #EF732B 1px 0 6px 1px;
+	-webkit-box-shadow: #EF732B 1px 0 6px 1px;
+	box-shadow: #EF732B 1px 0 6px 1px;
+}
+
+md-content {
 	background-color: white;
 }
 
-md-actions{
+md-actions {
 	background-color: white;
 	min-height: 50px;
+}
+
+.md-sidemenu-content {
+    display: block;
+}
+
+table[md-table] md-checkbox[disabled] {
+	background-color: #EEEEEE;
+}
+
+.center {
+	text-align: center !important;
+}
+
+.right {
+	text-align: right !important;
+}
+
+.left {
+	text-align: left !important;
 }

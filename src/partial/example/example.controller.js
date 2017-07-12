@@ -9,7 +9,6 @@
 
         var vm = this;
         vm.init = init;
-        vm.filter = JSON.parse(localStorage.getItem('filter')) || {};
         vm.getData = getData;
         vm.create = create;
         vm.update = update;
@@ -32,6 +31,16 @@
         });
 
         function init() {
+
+            var filterLast = JSON.parse(localStorage.getItem('filter')) || {};
+
+            if (filterLast[$state.current.url.split('/')[1]]) {
+                vm.filter = filterLast;
+            } else {
+                vm.filter = {};
+                vm.filter[$state.current.url.split('/')[1]] = true;
+            }
+
             getData({ reset: true });
         }
 
@@ -44,7 +53,6 @@
 
             params = params || {};
 
-            vm.filter = vm.filter || {};
             vm.filter.page = vm.example.page;
             vm.filter.limit = vm.example.limit;
 
@@ -71,7 +79,7 @@
             $state.go('example-form', { id: id });
         }
 
-        function remove() {
+        function remove(event) {
 
             var confirm = $mdDialog.confirm()
                 .title('ATENÇÃO')

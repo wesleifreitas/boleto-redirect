@@ -1,18 +1,17 @@
 <md-toolbar>
     <div class="md-toolbar-tools">
-        <!-- <img src="assets/img/logo/logo-example-50x50.png"> -->
-        <md-button aria-label="Exemplo" ui-sref="redirect()">
-            <md-icon class="material-icons" aria-hidden="true">home</md-icon> Sistema
+        <md-button class="md-icon-button" aria-label="Menu" ng-click="vm.toggleLeft()" hide show-xs show-sm>
+            <md-icon class="material-icons">menu</md-icon>
         </md-button>
+        <!-- <img src="assets/img/logo/logo-example-50x50.png"> -->
+        <md-button aria-label="Exemplo" ui-sref="example" hide-xs>
+            <md-icon class="material-icons" aria-hidden="true">home</md-icon>
+            <span>Home (Exemplo)</span>
+        </md-button>
+        <nav-bar item-click="vm.navBarClick(event)" flex hide-xs hide-sm sidemenu="vm.sidemenu"></nav-bar>
         <span flex></span>
-        <a href="http://boleto-redirect.pxproject.com.br/video.html" target="_blank">
-            <md-button class="md-icon">
-                <md-icon class="material-icons" aria-hidden="true">ondemand_video</md-icon> Vídeo
-            </md-button>
-        </a>
-
-        <a href="https://github.com/wesleifreitas/px-boleto-redirect" target="_blank">
-            <md-button class="md-icon">
+        <a href="https://github.com/wesleifreitas/px-project-a1" target="_blank">
+            <md-button class="md-icon" ng-click="vm.create()">
                 <i class="fa fa-github-alt" aria-hidden="true"></i> Fork me
             </md-button>
         </a>
@@ -22,9 +21,12 @@
     </div>
 </md-toolbar>
 <md-content class="home">
+    <div>
+        {{vm.sidemenu}}</div>
     <div layout="row" layout-align="center center" ui-view class="container">
     </div>
 </md-content>
+
 <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
     <md-toolbar class="">
         <h2 class="md-toolbar-tools">Configurações</h2>
@@ -51,5 +53,14 @@
             </md-button>
 
         </form>
+    </md-content>
+</md-sidenav>
+
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+    <md-toolbar class="">
+        <h2 class="md-toolbar-tools">Navegação</h2>
+    </md-toolbar>
+    <md-content layout="column" layout-align="center stretch" layout-padding>
+        <side-menu item-click="vm.sideMenuClick(event)"></side-menu>
     </md-content>
 </md-sidenav>

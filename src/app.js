@@ -2,6 +2,7 @@
     'use strict';
 
     const PROJECT_NAME = 'myApp';
+    const DEMO = false;
 
     angular
         .module(PROJECT_NAME, [
@@ -31,6 +32,7 @@
         });
 
     angular.module(PROJECT_NAME).constant('config', {
+        'DEMO': DEMO,
         // RESTful - ColdFusion
         // Registrar REST: http://localhost:8500/px-boleto-redirect/backend/cf/restInit.cfm
         'REST_URL': window.location.origin + '/rest/px-boleto-redirect',
@@ -49,7 +51,11 @@
 
         $urlRouterProvider.otherwise(function($injector) {
             var $state = $injector.get('$state');
-            $state.go('redirect');
+            if (DEMO) {
+                $state.go('redirect');
+            } else {
+                $state.go('login');
+            }
         });
 
         moment.locale('pt-BR');
@@ -105,6 +111,46 @@
     run.$inject = ['$rootScope', '$state', '$cookies', '$http'];
 
     function run($rootScope, $state, $cookies, $http) {
-        //$state.go('example');
+
+        if (DEMO) {
+            // fake
+            $rootScope.globals = {
+                currentUser: {
+                    username: 'admin',
+                    userid: 0
+                }
+            };
+            return;
+        }
+
+        // keep user logged in after page refresh
+        $rootScope.globals = $cookies.getObject('globals') || {};
+        if ($rootScope.globals.currentUser) {
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
+        }
+
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
+
+            var filterLast = JSON.parse(localStorage.getItem('filter')) || {};
+
+            if (!filterLast[toState.url.split('/')[1]]) {
+                localStorage.removeItem('filter');
+            }
+
+            if (toState.name === 'login' || toState.name === 'register') {
+                return;
+            } else {
+                var loggedIn = $rootScope.globals.currentUser;
+                if (!loggedIn) {
+                    $state.go('login');
+                    localStorage.removeItem('filter');
+                    event.preventDefault();
+                } else if (toState.name === 'home') {
+                    // redirecionar o primeiro state
+                    $state.go('example');
+                    event.preventDefault();
+                }
+            }
+        });
     }
 })();
