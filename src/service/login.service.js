@@ -14,6 +14,8 @@
         service.Logout = Logout;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
+        service.Redefine = Redefine;
+        service.Recover = Recover;
 
         // Base64 encoding service used by loginService
         var Base64 = {
@@ -143,6 +145,22 @@
             $rootScope.globals = {};
             $cookies.remove('globals');
             $http.defaults.headers.common.Authorization = 'Basic';
+        }
+
+        function Redefine(data) {
+            return $http({
+                method: 'POST',
+                url: config.REST_URL + '/login/redefine',
+                data: data
+            });
+        }
+
+        function Recover(data) {
+            return $http({
+                method: 'POST',
+                url: config.REST_URL + '/login/recover',
+                data: data
+            });
         }
     }
 })();

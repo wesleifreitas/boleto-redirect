@@ -7,7 +7,6 @@
             <div class="animate-switch-container" ng-switch on="vm.selection">
                 <div ng-switch-when="default" class="animate-switch">
                     <fieldset>
-
                         <md-input-container class="md-block">
                             <label>Usuário</label>
                             <input id="username" name="username" type="text" class="form-control" ng-model="vm.username" required>
@@ -42,18 +41,28 @@
                 </div>
                 <div ng-switch-when="redefine" class="animate-switch">
                     <fieldset>
-                        <md-input-container class="md-block">
-                            <input id="usu_senha_atual" name="usu_senha_atual" ng-model="vm.usu_senha_atual" class="form-control" type="password" placeholder="Senha atual" required ng-keyup="vm.redefineForm()" />
-                            <small ng-show="loginForm.usu_senha_atual.$error.confirm" class="error">Senha atual incorreta</small>
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Senha atual</label>
+                            <input id="passwordOld" name="passwordOld" ng-model="vm.passwordOld" required type="password">
+                            <div ng-messages="loginForm.passwordOld.$error" multiple md-auto-hide="false">
+                                <div ng-message="confirm">Senha atual incorreta</div>
+                            </div>
                         </md-input-container>
-                        <md-input-container class="md-block">
-                            <input id="usu_senha" name="usu_senha" ng-model="vm.usu_senha" class="form-control" type="password" placeholder="Nova senha" required ng-minlength="8" ng-keyup="vm.redefineForm()">
-                            <small ng-show="loginForm.usu_senha.$error.minlength" class="error">A senha deve ter no mínimo 8 caracteres</small>
-                            <small ng-show="loginForm.usu_senha.$error.equal" class="error">A senha deve diferente da atual</small>
+
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Nova Senha</label>
+                            <input id="usu_senha" name="passwordNew" ng-model="vm.passwordNew" required type="password" minlength="8">
+                            <div ng-messages="loginForm.passwordNew.$error" multiple md-auto-hide="false">
+                                <div ng-message="minlength">A senha deve ter no mínimo 8 caracteres</div>
+                            </div>
                         </md-input-container>
-                        <md-input-container class="md-block">
-                            <input id="usu_senha_confirmar" name="usu_senha_confirmar" ng-model="vm.usu_senha_confirmar" class="form-control" type="password" placeholder="Confirmar nova senha" required ng-minlength="8" ng-keyup="vm.redefineForm()">
-                            <small ng-show="loginForm.usu_senha_confirmar.$error.confirm" class="error">Senha não confere</small>
+
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Confirmar nova senha</label>
+                            <input id="passwordNewConfirm" name="passwordNewConfirm" ng-model="vm.passwordNewConfirm" required type="password" compare-to="vm.passwordNew">
+                            <div ng-messages="loginForm.passwordNewConfirm.$error" multiple md-auto-hide="false">
+                                <div ng-message="compareTo">Digite a mesma senha</div>
+                            </div>
                         </md-input-container>
                         <div layout="row" layout-align="center center">
                             <div class="btn-group">
@@ -61,7 +70,9 @@
                             </div>
                         </div>
                     </fieldset>
-                    <a ng-click="vm.showLogin()" class="recover-link">Cancelar</a>
+                    <div>
+                        <a ng-click="vm.showLogin()" class="recover-link">Cancelar</a>
+                    </div>
                 </div>
                 <span class="login-message">{{vm.loginMessage}}</span>
             </div>

@@ -3,15 +3,14 @@
 
     angular.module('myApp').controller('LoginCtrl', LoginCtrl);
 
-    LoginCtrl.$inject = ['$rootScope', '$scope', 'loginService', '$state', '$stateParams'];
+    LoginCtrl.$inject = ['$rootScope', '$scope', 'loginService', '$state', '$stateParams', '$mdDialog'];
     /* @ngInject */
-    function LoginCtrl($rootScope, $scope, loginService, $state, $stateParams) {
+    function LoginCtrl($rootScope, $scope, loginService, $state, $stateParams, $mdDialog) {
         var vm = this;
         vm.selection = 'default';
         vm.formTitle = 'Login';
         vm.loginMessage = '';
         vm.login = login;
-        vm.redefineForm = redefineForm;
         vm.redefine = redefine;
         vm.recover = recover;
         vm.showLogin = showLogin;
@@ -27,7 +26,7 @@
                         console.info('login', response);
                         vm.loginMessage = response.data.message;
                         if (response.data.success) {
-                            if (response.data.passwordChange === 1) {
+                            if (response.data.passwordChange) {
                                 vm.dataLoading = false;
                                 vm.formTitle = 'Alteração de senha';
                                 vm.selection = 'redefine';
@@ -54,65 +53,62 @@
             }
         }
 
-        function redefineForm() {
-            // Validar senha atual
-            if (String(vm.password) !== String(vm.passwordOld)) {
-                $scope.loginForm.passwordOld.$setValidity('confirm', false);
-            } else {
-                $scope.loginForm.passwordOld.$setValidity('confirm', true);
-            }
-
-            // Validar nova senha            
-            if (String(vm.passwordNew) === String(vm.password)) {
-                $scope.loginForm.passwordNew.$setValidity('equal', false);
-            } else {
-                $scope.loginForm.passwordNew.$setValidity('equal', true);
-
-                if (String(vm.passwordNew) !== String(vm.passwordNewConfirm)) {
-                    $scope.loginForm.passwordNewConfirm.$setValidity('confirm', false);
-                } else {
-                    $scope.loginForm.passwordNewConfirm.$setValidity('confirm', true);
-                }
-            }
-        }
-
         function redefine() {
             vm.dataLoading = true;
 
-            loginService.Redefine(vm.id, vm.username, vm.passwordNew, function(response) {
-                if (response.data.success) {
-                    loginService.SetCredentials(vm.username, vm.password, response);
-                    $state.go('home');
-                } else {
-                    vm.loginMessage = response.data.message;
-                    vm.dataLoading = false;
+            var data = {
+                username: vm.username,
+                passwordOld: vm.passwordOld,
+                passwordNew: vm.passwordNew
+            };
 
-                    $('#loginDiv').effect('shake', {
-                        direction: 'left',
-                        distance: 10,
-                        times: 3
-                    });
-                }
-            });
+            loginService.Redefine(data)
+                .then(function success(response) {
+                    //console.info(response);
+
+                    if (response.data.success) {
+                        loginService.SetCredentials(vm.username, vm.passwordNew, response.data);
+                        $state.go('home');
+                    } else {
+                        vm.loginMessage = response.data.message;
+                        vm.dataLoading = false;
+                    }
+                }, function error(response) {
+                    console.error(response);
+                });
         }
 
+        // função não implementada!
         function recover() {
             vm.dataLoading = true;
-            loginService.Recover(vm.username, vm.email, function(response) {
-                if (response.data.success) {
-                    alert('Foi enviado um e-mail para ' + vm.email + ' com as instruções de recuperação de login');
-                    vm.showLogin();
-                } else {
-                    vm.loginMessage = response.data.message;
-                    vm.dataLoading = false;
 
-                    $('#loginDiv').effect('shake', {
-                        direction: 'left',
-                        distance: 10,
-                        times: 3
-                    });
-                }
-            });
+            var data = {
+                username: vm.username,
+                email: vm.email
+            };
+
+            loginService.Recover(data)
+                .then(function success(response) {
+                    console.info(response);
+                    if (response.data.success) {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Aviso')
+                            .textContent('Foi enviado um e-mail para ' + vm.email +
+                                ' com as instruções de recuperação de login')
+                            .ok('Fechar')
+                        );
+
+                        //vm.showLogin();
+                        $state.reload();
+                    } else {
+                        vm.loginMessage = response.data.message;
+                        vm.dataLoading = false;
+                    }
+                }, function error(response) {
+                    console.error(response);
+                });
         }
 
         function showLogin() {
