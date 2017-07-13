@@ -112,7 +112,7 @@
                                     <tr md-row>
                                         <th md-column><span></span></th>
                                         <th md-column md-order-by="PER_NOME"><span>Nome do perfil</span></th>
-                                        <th md-column md-order-by="PER_ATIVO_LABEL"><span>Status</span></th>
+                                        <th md-column md-order-by="PER_ATIVO"><span>Status</span></th>
                                     </tr>
                                 </thead>
                                 <tbody md-body>
@@ -123,7 +123,7 @@
                                             </md-button>
                                         </td>
                                         <td md-cell>{{item.PER_NOME}}</td>
-                                        <td md-cell>{{item.PER_ATIVO_LABEL}}</td>
+                                        <td md-cell>{{item.PER_ATIVO}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -194,7 +194,7 @@
                                         <th md-column md-order-by="USU_LOGIN"><span>Login</span></th>
                                         <th md-column md-order-by="USU_CPF"><span>CPF</span></th>
                                         <th md-column md-order-by="PER_NOME"><span>Perfil</span></th>
-                                        <th md-column md-order-by="USU_ATIVO_LABEL"><span>Perfil</span></th>
+                                        <th md-column md-order-by="USU_ATIVO"><span>Status</span></th>
                                         <th md-column><span>Último acesso</span></th>
                                     </tr>
                                 </thead>
@@ -209,7 +209,7 @@
                                         <td md-cell>{{item.USU_LOGIN}}</td>
                                         <td md-cell nowrap>{{item.USU_CPF | brCpf}}</td>
                                         <td md-cell>{{item.PER_NOME}}</td>
-                                        <td md-cell>{{item.USU_ATIVO_LABEL}}</td>
+                                        <td md-cell>{{item.USU_ATIVO}}</td>
                                         <td md-cell>{{item.USU_ULTIMOACESSO | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                                     </tr>
                                 </tbody>

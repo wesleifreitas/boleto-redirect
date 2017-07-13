@@ -33,7 +33,6 @@
                 SELECT
 					per_id
 					,per_nome
-					,per_ativo_label
 					,grupo_id
 					,per_master
 				FROM
@@ -86,7 +85,6 @@
 					per_id
 					,per_nome
 					,per_ativo
-					,per_ativo_label
 					,grupo_id
 					,per_master
 				FROM

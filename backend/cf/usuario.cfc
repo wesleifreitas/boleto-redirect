@@ -40,7 +40,6 @@
 					,usu_login
 					,usu_cpf
 					,per_nome
-					,usu_ativo_label
 					,usu_ultimoAcesso
 				FROM
 					vw_usuario
@@ -104,7 +103,6 @@
                     ,per_id
                     ,per_nome
                     ,usu_ativo
-                    ,usu_ativo_label
                     ,usu_mudarSenha
                     ,usu_ultimoAcesso
                 FROM
