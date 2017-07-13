@@ -1,0 +1,136 @@
+<div layout="column" ng-cloak flex="100" class="boleto" ng-init="vm.init()">
+    <div layout="column" layout-align="start stretch" class="content">
+
+
+        <form name="formSearch" class="filter">
+            <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
+            <div layout="row" layout-wrap>
+                <md-input-container flex="15" flex-xs="50">
+                    <label>Ano (Vencimento)</label>
+                    <input ng-model="vm.filter.ano" type="number">
+                </md-input-container>
+
+                <md-input-container flex="20" flex-xs="50">
+                    <label>Mês (Vencimento)</label>
+                    <md-select ng-model="vm.filter.mes">
+                        <md-option ng-value="-1">
+                            <em>Todos</em>
+                        </md-option>
+                        <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
+                            {{vm.filter.months[$index]}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex="20" flex-xs="40">
+                    <label>CPF</label>
+                    <input name="CLI_CPFCNPJ" ng-model="vm.filter.CLI_CPFCNPJ" ui-br-cpf-mask>
+                    <div ng-messages="formSearch.CLI_CPFCNPJ.$error" multiple md-auto-hide="false">
+                        <div ng-message="cpf">CPF inválido.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex flex-xs="60">
+                    <label>Nome</label>
+                    <input ng-model="vm.filter.CLI_NOME">
+                </md-input-container>
+            </div>
+        </form>
+
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.boleto.selected.length">
+            <div class="md-toolbar-tools">
+                <span>Boletos</span>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="vm.create()">
+                    <md-icon>add</md-icon>
+                    <span>Adicionar<span>
+                </md-button>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})" hide-xs>
+                    <md-icon>refresh</md-icon>
+                    Atualizar
+                </md-button>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})" hide show-xs>
+                    <md-icon>search</md-icon>
+                    Pesquisar
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-toolbar class="md-accent md-hue-1" ng-show="vm.boleto.selected.length">
+            <div class="md-toolbar-tools">
+                <span>{{vm.boleto.selected.length}} {{vm.boleto.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="vm.remove()">
+                        <md-icon>delete</md-icon>
+                    </md-button>
+            </div>
+        </md-toolbar>
+
+
+        <md-table-container layout="column">
+            <!-- class="fix-head" -->
+            <div class="overflow">
+                <table md-table md-row-select="false" multiple="false" ng-model="vm.boleto.selected" md-progress="vm.boleto.promise">
+                    <thead md-head md-order="vm.boleto.order">
+                        <!-- fix-head  -->
+                        <tr md-row hide-xs hide-sm>
+                            <th md-column><span></span></th>
+                            <th md-column md-order-by=""><span>Vencimento</span></th>
+                            <th md-column md-order-by=""><span>E-mail</span></th>
+                            <th md-column md-order-by=""><span>Nome</span></th>
+                            <th md-column md-order-by=""><span>CPF</span></th>
+                            <th md-column md-order-by=""><span>Código de barras</span></th>
+                        </tr>
+                    </thead>
+
+                    <tbody md-body hide-xs hide-sm>
+                        <tr md-row md-select="item" md-select-id="_ID" ng-repeat="item in vm.boleto.data | orderBy: vm.boleto.order">
+                            <td md-cell>
+                                <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
+                                    <md-icon>search</md-icon>
+                                </md-button>
+                            </td>
+                            <td md-cell>{{item.BOL_VENCIMENTO | date : 'dd/MM/yyyy'}}</td>
+                            <td md-cell>{{item.BOL_EMAIL}}</td>
+                            <td md-cell>{{item.BOL_NOME}}</td>
+                            <td md-cell nowrap>{{item.BOL_CPF | brCpf}}</td>
+                            <td md-cell>{{item.BOL_CODIGO_BARRA}}</td>
+
+                        </tr>
+                    </tbody>
+
+                    <tbody md-body hide show-xs show-sm>
+                        <tr md-row md-select="item" md-select-id="_ID" ng-repeat="item in vm.boleto.data | orderBy: vm.boleto.order">
+                            <td md-cell>
+                                <md-card>
+                                    <md-card-content>
+                                        <table>
+                                            <tr>
+                                                <th md-order-by="">Nome</th>
+                                                <td>{{item.NOME}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>CPF</th>
+                                                <td>{{item.CPF | brCpf}}</td>
+                                            </tr>
+                                        </table>
+                                    </md-card-content>
+                                    <md-card-actions layout="row" layout-align="end center">
+                                        <md-button ng-if="!item.readonly" class="md-raised" ng-click="">
+                                            []
+                                        </md-button>
+                                    </md-card-actions>
+                                </md-card>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </md-table-container>
+
+        <div>
+            <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.boleto.limit" md-page="vm.boleto.page" md-total="{{vm.boleto.total}}" md-page-select md-on-paginate="vm.boleto.pagination"></md-table-pagination>
+        </div>
+    </div>
+</div>

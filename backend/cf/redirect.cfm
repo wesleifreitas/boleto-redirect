@@ -19,10 +19,12 @@
         source="#diretorio.Directory#/#diretorio.Name#"
         name="texto"				
         >
-
+    
     <cfset array 			= listToArray(texto, "CNPJ / CPF :", false, true)>
-		
-    <cfset vencimento 		= replace(mid(array[2],17,15), " ", "", "all")>	
+    <cfset vencimento 		= listToArray(array[2], "Pagador", false, true)>	
+    <cfset vencimento 		= parseDateTime(replace(right(vencimento[1], 15), " ", "", "all"))>	
+
+    <cfdump var="#vencimento#">
     
     <cfset valor 			= listToArray(array[2], "R $ ", false, true)>	
     <cfset valor 			= listToArray(valor[2], " ", false, true)>	
@@ -48,7 +50,8 @@
             CPF: cpfCnpjCliente,
             NOME: nome,
             EMAIL: lcase(email),
-            CODIGOBARRA: codigoBarra
+            CODIGOBARRA: codigoBarra,
+            VENCIMENTO: vencimento
         })>  
               
 </cfloop>

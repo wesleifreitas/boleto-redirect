@@ -148,7 +148,7 @@
                     event.preventDefault();
                 } else if (toState.name === 'home') {
                     // redirecionar o primeiro state
-                    $state.go('example');
+                    $state.go('boleto');
                     event.preventDefault();
                 }
             }

@@ -3,3 +3,4 @@ src/lib/
 src/build/
 .vscode
 debug.log
+_server
