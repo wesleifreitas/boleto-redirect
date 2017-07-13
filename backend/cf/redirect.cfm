@@ -23,8 +23,6 @@
     <cfset array 			= listToArray(texto, "CNPJ / CPF :", false, true)>
     <cfset vencimento 		= listToArray(array[2], "Pagador", false, true)>	
     <cfset vencimento 		= parseDateTime(replace(right(vencimento[1], 15), " ", "", "all"))>	
-
-    <cfdump var="#vencimento#">
     
     <cfset valor 			= listToArray(array[2], "R $ ", false, true)>	
     <cfset valor 			= listToArray(valor[2], " ", false, true)>	
@@ -51,7 +49,8 @@
             NOME: nome,
             EMAIL: lcase(email),
             CODIGOBARRA: codigoBarra,
-            VENCIMENTO: vencimento
+            VENCIMENTO: vencimento,
+            VALOR: valor
         })>  
               
 </cfloop>
