@@ -57,16 +57,13 @@
         }
 
         function logout() {
-            /*loginService.Logout()
+            loginService.Logout()
                 .then(function success(response) {
                     loginService.ClearCredentials();
                     $state.go('login');
                 }, function error(response) {
                     console.error(response);
-                });*/
-
-            loginService.ClearCredentials();
-            $state.go('login');
+                });
         }
 
         function buildToggler(navID) {

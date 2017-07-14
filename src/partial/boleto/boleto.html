@@ -1,10 +1,8 @@
 <div layout="column" ng-cloak flex="100" class="boleto" ng-init="vm.init()">
     <div layout="column" layout-align="start stretch" class="content">
-
-
         <form name="formSearch" class="filter">
             <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
-            <div layout="row" layout-wrap>
+            <div layout="row" layout-align="center" layout-wrap>
                 <md-input-container flex="15" flex-xs="50">
                     <label>Ano (Vencimento)</label>
                     <input ng-model="vm.filter.ano" type="number">
@@ -22,7 +20,7 @@
                     </md-select>
                 </md-input-container>
 
-                <md-input-container class="md-block" flex="20" flex-xs="40">
+                <md-input-container class="md-block" flex="20" flex-xs="40" ng-if="!globals.currentUser.session.perfilpassageiro">
                     <label>CPF</label>
                     <input name="CPF" ng-model="vm.filter.CPF" ui-br-cpf-mask>
                     <div ng-messages="formSearch.CPF.$error" multiple md-auto-hide="false">
@@ -30,7 +28,7 @@
                     </div>
                 </md-input-container>
 
-                <md-input-container class="md-block" flex flex-xs="60">
+                <md-input-container class="md-block" flex flex-xs="60" ng-if="!globals.currentUser.session.perfilpassageiro">
                     <label>Nome</label>
                     <input ng-model="vm.filter.NOME">
                 </md-input-container>
@@ -116,24 +114,57 @@
                     </tbody>
 
                     <tbody md-body hide show-xs show-sm>
-                        <tr md-row md-select="item" md-select-id="BOL_ID" ng-repeat="item in vm.boleto.data | orderBy: vm.boleto.order">
+                        <tr ng-disabled="true" md-row md-select="item" md-select-id="BOL_ID" ng-repeat="item in vm.boleto.data | orderBy: vm.boleto.order">
                             <td md-cell>
                                 <md-card>
                                     <md-card-content>
                                         <table>
                                             <tr>
-                                                <th md-order-by="">Nome</th>
-                                                <td>{{item.NOME}}</td>
+                                                <th md-order-by="">Vencimento</th>
+                                                <td>{{item.BOL_VENCIMENTO | date : 'dd/MM/yyyy'}}</td>
                                             </tr>
                                             <tr>
-                                                <th>CPF</th>
-                                                <td>{{item.CPF | brCpf}}</td>
+                                                <th md-order-by="">Valor</th>
+                                                <td>{{item.BOL_VALOR}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th md-order-by="">Nome</th>
+                                                <td>{{item.BOL_NOME}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th md-order-by="">CPF</th>
+                                                <td>{{item.BOL_CPF | brCpf}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th md-order-by="">Código de barras</th>
+                                                <td>{{item.BOL_CODIGO_BARRA}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>E-mail</th>
+                                                <td>
+                                                    <div layout="row" layout-align="start center">
+                                                        <div ng-class="{'md-warn': !item.BOL_EMAIL_ENVIADO}" class="email-info">
+                                                            <md-icon ng-if="!item.BOL_EMAIL_ENVIADO">
+                                                                warning
+                                                            </md-icon>
+                                                            <md-tooltip ng-if="!item.BOL_EMAIL_ENVIADO" md-direction="top">
+                                                                {{item.USU_EMAIL === '' ? 'E-mail não cadastrado' : 'E-mail não enviado'}}
+                                                            </md-tooltip>
+                                                            <!-- to.do: <span ng-if="item.USU_EMAIL === ''">
+                                                                Cadastrar e-mail ng-show="!item.BOL_EMAIL_ENVIADO"
+                                                            </span> -->
+                                                            {{item.USU_EMAIL}}
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </table>
                                     </md-card-content>
-                                    <md-card-actions layout="row" layout-align="end center">
-                                        <md-button ng-if="!item.readonly" class="md-raised" ng-click="">
-                                            []
+                                    <md-card-actions layout="row">
+                                        <md-button ng-if="!item.readonly" class="md-raised md-primary" ng-click="vm.showPdf(item)" flex>
+                                            <md-icon>search</md-icon>
+                                            Visualizar boleto
                                         </md-button>
                                     </md-card-actions>
                                 </md-card>

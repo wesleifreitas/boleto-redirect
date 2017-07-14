@@ -12,6 +12,10 @@
 
 		<cftry>
 
+			<cfif session.perfilPassageiro EQ 1>
+				<cfset url.cpf = session.userCpf>
+			</cfif>
+
 			<cfquery datasource="#application.datasource#" name="queryCount">
                 SELECT
                     COUNT(*) AS COUNT
@@ -88,7 +92,7 @@
 			<cfset response["query"] = queryToArray(query)>
 
 			<cfcatch>
-				<cfset responseError(400, cfcatch.detail)>
+				<cfset responseError(400, cfcatch.message)>
 			</cfcatch>
 		</cftry>
 		

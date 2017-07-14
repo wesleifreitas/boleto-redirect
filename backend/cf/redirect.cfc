@@ -8,6 +8,7 @@
 	
 		<cftry>
 			<cfset SEND_EMAIL = true>
+			<cfset email_enviado = 0>
 
 			<cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & 
 				"/../../_server/redirect/upload/#LSDateFormat(now() , "YYYYMM")#/#CreateUUID()#">
@@ -95,7 +96,7 @@
 				
 				<cfif qUsuario.recordCount GT 0>
 					
-					<cfif SEND_EMAIL>
+					<cfif SEND_EMAIL AND qUsuario.usu_email NEQ "">
 						<cfmail from="#qSMTP.smtp_username#"
 							type="html"
 							to="#qUsuario.usu_email#"		
@@ -122,6 +123,7 @@
 								<p><b>Este é um e-mail automático, não responda.</b></p>
 							</cfoutput>	
 						</cfmail>
+						<cfset email_enviado = 1>
 					</cfif>
 
 					<cfquery datasource="#application.datasource#">
@@ -158,7 +160,7 @@
 							,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
 							,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
 							,1
-							,1
+							,#email_enviado#
 							,<cfqueryparam value = "#qUsuario.usu_id#" CFSQLType = "CF_SQL_INTEGER">							
 						)
 					</cfquery>
@@ -217,7 +219,7 @@
 							,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
 							,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
 							,1
-							,0							
+							,#email_enviado#						
 							,<cfqueryparam value = "#rUsuario.IDENTITYCOL#" CFSQLType = "CF_SQL_INTEGER">
 						)
 					</cfquery>

@@ -28,10 +28,12 @@
                     ,usu_senha 
                     ,usu_mudarSenha
                     ,per_developer
+                    ,usu_cpf
                     ,grupo_id
                     ,per_id
                     ,'' as perfil_grupo
                     ,'' as perfil_grupo_query
+                    ,per_passageiro
                 FROM 
                     dbo.vw_usuario
                 WHERE 
@@ -90,11 +92,13 @@
                     <cflock timeout="20" throwontimeout="No" type="EXCLUSIVE" scope="session">
                         <cfset session.authenticated = true>					
                         <cfset session.userId = qLogin.usu_id>
-                        <cfset session.userName = qLogin.usu_nome>   
+                        <cfset session.userName = qLogin.usu_nome>  
+                        <cfset session.userCpf = qLogin.usu_cpf>                            
                         <cfset session.perfilDeveloper = qLogin.per_developer>    
                         <cfset session.grupoId = qLogin.grupo_id>    
                         <cfset session.grupoList = qLogin.perfil_grupo>
                         <cfset session.perfilId = qLogin.per_id>
+                        <cfset session.perfilPassageiro = qLogin.per_passageiro>
                         <cfset session.acesso = arrayToList(acesso)>                           
                     </cflock>
                     <cfset response["session"] = session>
