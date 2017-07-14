@@ -16,7 +16,11 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     cssmin = require('gulp-cssmin'),
     livereload = require('gulp-livereload'),
-    moment = require('moment');
+    moment = require('moment'),
+    rename = require("gulp-rename");
+
+
+var version = (new Date()).getTime();
 
 // https://www.npmjs.com/package/gulp-webserver
 gulp.task('serve', ['watch'], function() {
@@ -120,13 +124,13 @@ var gulpSrc = function(opts) {
 
 
 var jsBuild = es.pipeline(
-    //uglify(),
-    plugins.concat('concat.js'),
+    uglify(),
+    plugins.concat('concat_' + version + '.js'),
     gulp.dest('./src/build/js')
 );
 
 var cssBuild = es.pipeline(
-    plugins.concat('concat.css'),
+    plugins.concat('concat_.' + version + 'css'),
     gulp.dest('./src/build/css')
 );
 
@@ -180,6 +184,10 @@ gulp.task('less', function() {
             paths: [path.join(__dirname, 'less', 'includes')]
         }))
         //.pipe(cssmin())
+        .pipe(rename({
+            suffix: '_' + version,
+            extname: '.css'
+        }))
         .pipe(gulp.dest('./src/build'));
 });
 
@@ -213,7 +221,8 @@ gulp.task('lib-fonts', function() {
 
 gulp.task('index-replace', function() {
     gulp.src(['./src/build/index.html'])
-        .pipe(replace('app.less', 'app.css'))
+        .pipe(replace('js/concat.js', 'js/concat_' + version + '.js'))
+        .pipe(replace('app.less', 'app_' + version + '.css'))
         .pipe(replace('stylesheet/less', 'stylesheet'))
         .pipe(gulp.dest('./src/build'));
 })
