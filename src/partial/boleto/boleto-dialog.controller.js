@@ -38,11 +38,8 @@
         //console.log(config);
 
         function setFlowOptions($flow) {
-            //console.info('setFlowOptions', $flow);
-            $scope.operacao = moment().format('YYYYMMDDHHmmss');
-            $flow.opts.query.grupo = 1;
-            $flow.opts.query.cedente = 1;
-            $flow.opts.query.operacao = $scope.operacao;
+            //console.info('setFlowOptions', $flow);            
+            $flow.opts.query.cc = vm.email;
             $flow.resume();
         }
 

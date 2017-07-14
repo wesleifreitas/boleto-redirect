@@ -4,6 +4,8 @@
     returntype ="void" 
     output     ="false">
 
+    <cfargument name="state" type="array" required="false" hint="acesso">
+
     <cfset var authHeader = GetPageContext().getRequest().getHeader("Authorization") />
     <cfset var authString = "" />
     <cfsetting showDebugOutput="false" />

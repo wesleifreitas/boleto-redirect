@@ -10,10 +10,19 @@
     </md-toolbar>
     <md-dialog-content>
         <md-content class="content" flow-init="vm.initFlow()" flow-file-added="vm.fileAdded( $file, $event, $flow )" flow-file-success="vm.fileSuccess( $file, $message, $flow )" flow-files-submitted="vm.filesSubmitted( $file, $message, $flow )">
-            <div layout="column" layout-align="center center">
-                <h3>Redirecionar boletos </h3>
-            </div>
-            <hr class="soften" />
+
+            <form name="form">
+                <div layout="row" layout-padding>
+                    <md-input-container class="md-block" flex>
+                        <label>Cc:</label>
+                        <input type="email" name="email" ng-model="vm.email">
+                        <div ng-messages="form.email.$error">
+                            <div ng-message="email">E-mail inválido.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </form>
+
             <div layout="row" layout-align="center center">
                 <md-button flow-btn>
                     <md-icon class="material-icons">insert_drive_file</md-icon>

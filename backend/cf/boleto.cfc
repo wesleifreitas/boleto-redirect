@@ -19,6 +19,20 @@
                     dbo.boleto
                 WHERE
                     1 = 1
+				AND bol_status > 0
+
+				<cfif IsDefined("url.cpf") AND url.cpf NEQ "">
+                    AND	bol_cpf = <cfqueryparam value = "#url.cpf#" CFSQLType = "CF_SQL_VARCHAR">
+                </cfif>
+                <cfif IsDefined("url.nome") AND url.nome NEQ "">
+                    AND	bol_nome COLLATE Latin1_general_CI_AI LIKE <cfqueryparam value = "%#url.nome#%" CFSQLType = "CF_SQL_VARCHAR">
+                </cfif>
+                <cfif IsDefined("url.ano") AND IsNumeric(url.ano)>
+                    AND	YEAR(bol_vencimento) = <cfqueryparam value = "#url.ano#" CFSQLType = "CF_SQL_NUMERIC">
+                </cfif>
+                <cfif IsDefined("url.mes") AND url.mes GT 0>
+                    AND	MONTH(bol_vencimento) = <cfqueryparam value = "#url.mes + 1#" CFSQLType = "CF_SQL_NUMERIC">
+                </cfif>
                 
             </cfquery>
 
@@ -31,13 +45,34 @@
                     ,bol_codigo_barra
                     ,bol_data
                     ,bol_vencimento
-                    ,usu_id
+					,bol_valor
+					,bol_status
+					,bol_email_enviado
+                    ,boleto.usu_id
+					,usu_email
                 FROM
-                    dbo.boleto
+                    dbo.boleto AS boleto
+
+				LEFT OUTER JOIN dbo.usuario AS usuario
+				ON usuario.usu_id = boleto.usu_id
+
                 WHERE
                     1 = 1
-                
+				AND bol_status > 0
 
+				<cfif IsDefined("url.cpf") AND url.cpf NEQ "">
+                    AND	bol_cpf = <cfqueryparam value = "#url.cpf#" CFSQLType = "CF_SQL_VARCHAR">
+                </cfif>
+                <cfif IsDefined("url.nome") AND url.nome NEQ "">
+                    AND	bol_nome COLLATE Latin1_general_CI_AI LIKE <cfqueryparam value = "%#url.nome#%" CFSQLType = "CF_SQL_VARCHAR">
+                </cfif>
+                <cfif IsDefined("url.ano") AND IsNumeric(url.ano)>
+                    AND	YEAR(bol_vencimento) = <cfqueryparam value = "#url.ano#" CFSQLType = "CF_SQL_NUMERIC">
+                </cfif>
+                <cfif IsDefined("url.mes") AND url.mes GT 0>
+                    AND	MONTH(bol_vencimento) = <cfqueryparam value = "#url.mes + 1#" CFSQLType = "CF_SQL_NUMERIC">
+                </cfif>
+                
                 ORDER BY
                     bol_vencimento DESC
                     ,bol_nome ASC
@@ -53,7 +88,7 @@
 			<cfset response["query"] = queryToArray(query)>
 
 			<cfcatch>
-				<cfset responseError(400, cfcatch.message)>
+				<cfset responseError(400, cfcatch.detail)>
 			</cfcatch>
 		</cftry>
 		
@@ -200,6 +235,43 @@
 		</cftry>
 		
 		<cfreturn SerializeJSON(response)>
+	</cffunction>
+
+	<cffunction name="pdf" access="remote" returnType="String" httpMethod="POST" restpath="/pdf">		
+		<cfargument name="body" type="String">
+
+		<cfset checkAuthentication(state = ['boleto'])>
+		
+		<cfset body = DeserializeJSON(arguments.body)>
+		
+		<cfset response = structNew()>
+		<cfset response["arguments"] = arguments>
+
+		<cftry>
+
+			<cfquery datasource="#application.datasource#" name="query">
+                SELECT
+                    bol_url
+                FROM
+                    dbo.boleto AS boleto
+                WHERE
+					bol_id = <cfqueryparam value = "#body.BOL_ID#" CFSQLType = "CF_SQL_INTEGER">
+            </cfquery>
+						
+			<cffile  
+					action="readBinary"  
+					file="#query.bol_url#" 
+					variable="binary">
+
+			<cfset response["pdf"] = toBase64(binary)>		
+			
+			<cfcatch>				
+				<cfset responseError(400, cfcatch.message)>				
+			</cfcatch>	
+		</cftry>
+		
+		<cfreturn SerializeJSON(response)>
+
 	</cffunction>
 
 </cfcomponent>

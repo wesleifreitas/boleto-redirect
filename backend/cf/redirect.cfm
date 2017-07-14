@@ -21,8 +21,9 @@
         >
     
     <cfset array 			= listToArray(texto, "CNPJ / CPF :", false, true)>
-    <cfset vencimento 		= listToArray(array[2], "Pagador", false, true)>	
-    <cfset vencimento 		= parseDateTime(replace(right(vencimento[1], 15), " ", "", "all"))>	
+    <cfset vencimento 		= listToArray(array[2], "Pagador", false, true)>    
+    <cfset vencimento 		= replace(right(vencimento[1], 15), " ", "", "all")>
+    <cfset vencimento 		= CreateDate(mid(vencimento,7 ,4), mid(vencimento,4 ,2), mid(vencimento,1 ,2))>
     
     <cfset valor 			= listToArray(array[2], "R $ ", false, true)>	
     <cfset valor 			= listToArray(valor[2], " ", false, true)>	

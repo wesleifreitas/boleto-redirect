@@ -1,0 +1,32 @@
+<md-dialog ng-cloak flex="70" flex-xs="100" aria-label="" ng-init="vm.init()" class="boleto-pdf-dialog">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Boleto</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="fa fa-close"></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content flex>
+        <div layout="row">
+            <div flex>
+
+                <div layout="row" layout-align="center center" ng-show="!vm.pdfViewer" class="iframe-loading">
+                    <md-progress-circular md-mode="indeterminate" md-diameter="70"></md-progress-circular>
+                </div>
+
+                <iframe ng-show="vm.pdfViewer" src="{{vm.pdfViewer}}"></iframe>
+            </div>
+        </div>
+
+        <md-actions layout="row" layout-xs="column">
+            <md-button ng-if="!vm.form" class="md-raised md-primary" ng-click="vm.save()" flex>
+                <md-icon>email</md-icon>
+                Reenviar
+            </md-button>
+        </md-actions>
+
+    </md-dialog-content>
+</md-dialog>

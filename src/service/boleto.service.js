@@ -16,6 +16,7 @@
         service.update = update;
         service.remove = remove;
         service.removeById = removeById;
+        service.pdf = pdf;
 
         return service;
 
@@ -105,6 +106,22 @@
                         'Authorization': '',
                         'Content-Type': 'application/json'
                     }
+                })
+                .then(handleSuccess, handleError);
+
+            return req;
+        }
+
+        function pdf(data) {
+
+            var req = $http({
+                    url: config.REST_URL + '/boleto/pdf',
+                    method: 'POST',
+                    headers: {
+                        'Authorization': '',
+                        'Content-Type': 'application/json'
+                    },
+                    data: data
                 })
                 .then(handleSuccess, handleError);
 

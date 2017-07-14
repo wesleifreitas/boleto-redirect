@@ -22,6 +22,7 @@
             pagination: pagination,
             total: 0
         };
+        vm.showPdf = showPdf;
 
         // $on
         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope
@@ -123,6 +124,25 @@
                     });
             }, function() {
                 // cancel
+            });
+        }
+
+        function showPdf(item) {
+            var locals = {
+                item: item
+            };
+
+            $mdDialog.show({
+                locals: locals,
+                preserveScope: true,
+                controller: 'BoletoPDfDialogCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'partial/boleto/boleto-pdf-dialog.html',
+                parent: angular.element(document.body),
+                //targetEvent: event,
+                clickOutsideToClose: false
+            }).then(function(data) {
+
             });
         }
     }
