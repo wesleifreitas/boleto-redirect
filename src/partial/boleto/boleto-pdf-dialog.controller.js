@@ -9,6 +9,7 @@
 
         var vm = this;
         vm.init = init;
+        vm.pdfViewer = '';
         vm.save = save;
         vm.cancel = cancel;
 
@@ -21,7 +22,7 @@
                     var blob = stringUtil.toBinary(response.pdf, 'application/pdf;base64');
                     var blobUrl = URL.createObjectURL(blob);
 
-                    vm.pdfViewer = 'pdf-viewer/web/viewer.cfm?file=' + blobUrl;
+                    vm.pdfViewer = 'pdf-viewer/web/viewer.html?file=' + blobUrl;
 
                 }, function error(response) {
                     console.error(response);

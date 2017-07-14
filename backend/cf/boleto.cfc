@@ -88,7 +88,7 @@
 			
 			<cfset response["page"] = URL.page>	
 			<cfset response["limit"] = URL.limit>	
-			<cfset response["recordCount"] = query.recordCount>
+			<cfset response["recordCount"] = queryCount.COUNT>
 			<cfset response["query"] = queryToArray(query)>
 
 			<cfcatch>
