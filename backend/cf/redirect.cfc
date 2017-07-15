@@ -7,7 +7,7 @@
 		<cfset checkAuthentication()>
 	
 		<cftry>
-			<cfset SEND_EMAIL = false>
+			<cfset SEND_EMAIL = true>
 			<cfset email_enviado = 0>
 
 			<cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & 
