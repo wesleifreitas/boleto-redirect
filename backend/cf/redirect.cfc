@@ -126,107 +126,111 @@
 						<cfset email_enviado = 1>
 					</cfif>
 
-					<cfquery datasource="#application.datasource#">
-						UPDATE
-							dbo.boleto
-						SET
-							bol_status = 0
-						WHERE
-							bol_cpf = <cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
-						AND bol_vencimento = <cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
-					</cfquery>
+					<cftransaction>
+						<cfquery datasource="#application.datasource#">
+							UPDATE
+								dbo.boleto
+							SET
+								bol_status = 0
+							WHERE
+								bol_cpf = <cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
+							AND bol_vencimento = <cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
+						</cfquery>
 
-					<cfquery datasource="#application.datasource#">
-						INSERT INTO 
-							dbo.boleto
-						(							
-							bol_cpf
-							,bol_nome
-							,bol_email
-							,bol_codigo_barra
-							,bol_data
-							,bol_vencimento
-							,bol_valor
-							,bol_url
-							,bol_status
-							,bol_email_enviado
-							,usu_id							
-						) 
-						VALUES (							
-							<cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value = "#nome#" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value = "#qUsuario.usu_email#" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value = "#codigoBarra#" CFSQLType = "CF_SQL_VARCHAR">
-							,GETDATE()
-							,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
-							,<cfqueryparam value = "#valor#" CFSQLType = "CF_SQL_FLOAT">
-							,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
-							,1
-							,#email_enviado#
-							,<cfqueryparam value = "#qUsuario.usu_id#" CFSQLType = "CF_SQL_INTEGER">							
-						)
-					</cfquery>
+						<cfquery datasource="#application.datasource#">
+							INSERT INTO 
+								dbo.boleto
+							(							
+								bol_cpf
+								,bol_nome
+								,bol_email
+								,bol_codigo_barra
+								,bol_data
+								,bol_vencimento
+								,bol_valor
+								,bol_url
+								,bol_status
+								,bol_email_enviado
+								,usu_id							
+							) 
+							VALUES (							
+								<cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value = "#nome#" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value = "#qUsuario.usu_email#" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value = "#codigoBarra#" CFSQLType = "CF_SQL_VARCHAR">
+								,GETDATE()
+								,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
+								,<cfqueryparam value = "#valor#" CFSQLType = "CF_SQL_FLOAT">
+								,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
+								,1
+								,#email_enviado#
+								,<cfqueryparam value = "#qUsuario.usu_id#" CFSQLType = "CF_SQL_INTEGER">							
+							)
+						</cfquery>
+					</cftransaction>
 				<cfelse>
 
 					<cfset login = listToArray(nome, " ", false, true)>	
 					<cfset login = login[1] & "." & login[ArrayLen(login)]>	
 					<cfset login = lcase(login)>	
 
-					<cfquery datasource="#application.datasource#" result="rUsuario">
-						INSERT INTO 
-						dbo.usuario
-						(
-							usu_ativo
-							,per_id
-							,usu_login
-							,usu_senha
-							,usu_nome
-							,usu_email
-							,usu_cpf
-							,usu_mudarSenha
-						) 
-						VALUES (
-							1
-							,4 <!--- HARD CODE --->
-							,<cfqueryparam value = "#login#" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value="#hash(mid(cpfCnpjCliente, 1, 3), 'SHA-512')#" cfsqltype="cf_sql_varchar">
-							,<cfqueryparam value = "#nome#" CFSQLType = "CF_SQL_VARCHAR">
-							,''
-							,<cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
-							,1
-						);
-					</cfquery>
+					<cftransaction>
+						<cfquery datasource="#application.datasource#" result="rUsuario">
+							INSERT INTO 
+							dbo.usuario
+							(
+								usu_ativo
+								,per_id
+								,usu_login
+								,usu_senha
+								,usu_nome
+								,usu_email
+								,usu_cpf
+								,usu_mudarSenha
+							) 
+							VALUES (
+								1
+								,4 <!--- HARD CODE --->
+								,<cfqueryparam value = "#login#" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value="#hash(mid(cpfCnpjCliente, 1, 3), 'SHA-512')#" cfsqltype="cf_sql_varchar">
+								,<cfqueryparam value = "#nome#" CFSQLType = "CF_SQL_VARCHAR">
+								,''
+								,<cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
+								,1
+							);
+						</cfquery>
 
-					<cfquery datasource="#application.datasource#">
-						INSERT INTO 
-							dbo.boleto
-						(							
-							bol_cpf
-							,bol_nome
-							,bol_email
-							,bol_codigo_barra
-							,bol_data
-							,bol_vencimento
-							,bol_valor
-							,bol_url
-							,bol_status
-							,bol_email_enviado
-							,usu_id
-						) 
-						VALUES (							
-							<cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value = "#nome#" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value = "[E-MAIL NÃO REGISTRADO!]" CFSQLType = "CF_SQL_VARCHAR">
-							,<cfqueryparam value = "#codigoBarra#" CFSQLType = "CF_SQL_VARCHAR">
-							,GETDATE()
-							,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
-							,<cfqueryparam value = "#valor#" CFSQLType = "CF_SQL_FLOAT">
-							,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
-							,1
-							,#email_enviado#						
-							,<cfqueryparam value = "#rUsuario.IDENTITYCOL#" CFSQLType = "CF_SQL_INTEGER">
-						)
-					</cfquery>
+						<cfquery datasource="#application.datasource#">
+							INSERT INTO 
+								dbo.boleto
+							(							
+								bol_cpf
+								,bol_nome
+								,bol_email
+								,bol_codigo_barra
+								,bol_data
+								,bol_vencimento
+								,bol_valor
+								,bol_url
+								,bol_status
+								,bol_email_enviado
+								,usu_id
+							) 
+							VALUES (							
+								<cfqueryparam value = "#cpfCnpjCliente#" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value = "#nome#" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value = "[E-MAIL NÃO REGISTRADO!]" CFSQLType = "CF_SQL_VARCHAR">
+								,<cfqueryparam value = "#codigoBarra#" CFSQLType = "CF_SQL_VARCHAR">
+								,GETDATE()
+								,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
+								,<cfqueryparam value = "#valor#" CFSQLType = "CF_SQL_FLOAT">
+								,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
+								,1
+								,#email_enviado#						
+								,<cfqueryparam value = "#rUsuario.IDENTITYCOL#" CFSQLType = "CF_SQL_INTEGER">
+							)
+						</cfquery>
+					</cftransaction>
 				</cfif>
 			</cfloop>
 

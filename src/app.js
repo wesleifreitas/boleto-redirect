@@ -109,9 +109,9 @@
         };
     }
 
-    run.$inject = ['$rootScope', '$state', '$cookies', '$http'];
+    run.$inject = ['$rootScope', '$state', '$cookies', '$http', '$mdDialog'];
 
-    function run($rootScope, $state, $cookies, $http) {
+    function run($rootScope, $state, $cookies, $http, $mdDialog) {
 
         if (DEMO) {
             // fake
@@ -129,6 +129,14 @@
         if ($rootScope.globals.currentUser) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
         }
+
+        $rootScope.$on('$locationChangeStart', function($event) {
+            // Check if there is a dialog active
+            if (angular.element(document).find('md-dialog').length > 0) {
+                $event.preventDefault(); // Prevent route from changing
+                $mdDialog.cancel(); // Cancel the active dialog
+            }
+        });
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
