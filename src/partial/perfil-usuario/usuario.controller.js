@@ -68,6 +68,7 @@
 
                     // Ajustar date
                     for (var i = 0; i <= response.query.length - 1; i++) {
+                        response.query[i].USU_CPF = String(response.query[i].USU_CPF);
                         if (response.query[i].USU_ULTIMOACESSO !== '') {
                             response.query[i].USU_ULTIMOACESSO = new Date(response.query[i].USU_ULTIMOACESSO);
                         }

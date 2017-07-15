@@ -62,11 +62,12 @@
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm="">
-                        <label>CPF</label>
-                        <input name="cpf" ng-model="vm.usuario.cpf" ui-br-cpf-mask required>
+                        <label>CPF/CNPJ</label>
+                        <input name="cpf" ng-model="vm.usuario.cpf" ui-br-cpfcnpj-mask required>
                         <div ng-messages="form.cpf.$error" multiple md-auto-hide="false">
                             <div ng-message="required">Campo obrigatório.</div>
                             <div ng-message="cpf">CPF inválido.</div>
+                            <div ng-message="cnpj">CNPJ inválido.</div>
                         </div>
                     </md-input-container>
                 </div>

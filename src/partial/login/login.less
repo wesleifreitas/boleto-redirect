@@ -1,18 +1,11 @@
 @charset "utf-8";
 .login {
-	background: red;
-	#loginForm {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		height: 70%;
-		margin: auto;
-	}
-	#loginControl {
-		padding-top: 10px;
-	}
+	background: url('./assets/img/wallpaper/px-example-q70.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	height: 100%;
 	#headerDiv {
 		font-family: 'Segoe UI Light_', 'Open Sans Light', Verdana, Arial, Helvetica, sans-serif;
 		height: 25px;
@@ -57,7 +50,6 @@
 		display: block;
 		margin-top: 5px;
 		cursor: pointer;
-		/*text-shadow: 0 0 0.2em #000, 0 0 0.2em #000*/
 	}
 	#loginDiv .recover-link:hover {
 		color: #FFFFFF;
@@ -78,7 +70,6 @@
 		display: block;
 		margin-top: 5px;
 		cursor: pointer;
-		/*text-shadow: 0 0 0.2em #000, 0 0 0.2em #000*/
 	}
 	#loginDiv .new-user-link:hover {
 		color: white;
@@ -86,7 +77,6 @@
 	#loginDiv .login-message {
 		width: 100%;
 		text-align: center;
-		/*color: #A94442;*/
 		color: #FFFFFF;
 		font-weight: 400;
 		display: block;
@@ -95,7 +85,7 @@
 	}
 	.animate-switch-container {
 		position: relative;
-		height: 350px;
+		height: 300px;
 		overflow: hidden;
 		padding-top: 5px;
 	}
@@ -122,9 +112,13 @@
 	md-input-container {
 		padding-left: 0;
 		padding-right: 0;
-	
 		margin-left: 0;
 		margin-right: 0;
-	
+	}
+	.redefine {
+		md-input-container {
+			margin: 0;
+			padding: 0;
+		}
 	}
 }

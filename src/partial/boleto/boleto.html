@@ -21,10 +21,11 @@
                 </md-input-container>
 
                 <md-input-container class="md-block" flex="20" flex-xs="40" ng-if="!globals.currentUser.session.perfilpassageiro">
-                    <label>CPF</label>
-                    <input name="CPF" ng-model="vm.filter.CPF" ui-br-cpf-mask>
+                    <label>CPF/CNPJ</label>
+                    <input name="CPF" ng-model="vm.filter.CPF" ui-br-cpfcnpj-mask>
                     <div ng-messages="formSearch.CPF.$error" multiple md-auto-hide="false">
                         <div ng-message="cpf">CPF inválido.</div>
+                        <div ng-message="cnpj">CNPJ inválido.</div>
                     </div>
                 </md-input-container>
 
@@ -39,7 +40,7 @@
             <div class="md-toolbar-tools">
                 <span>Boletos</span>
                 <span flex></span>
-                <md-button class="md-primary" ng-click="vm.create()">
+                <md-button class="md-primary" ng-click="vm.create()" ng-if="!globals.currentUser.session.perfilpassageiro">
                     <md-icon>add</md-icon>
                     <span>Adicionar<span>
                 </md-button>
@@ -47,7 +48,7 @@
                     <md-icon>refresh</md-icon>
                     Atualizar
                 </md-button>
-                <!-- >md-button class="md-primary" ng-click="vm.getData({reset: true})" hide show-xs>
+                <!-- <md-button class="md-primary" ng-click="vm.getData({reset: true})" hide show-xs>
                     <md-icon>search</md-icon>
                     Pesquisar
                 </md-button> -->
@@ -75,6 +76,7 @@
                         <tr md-row hide-xs hide-sm>
                             <th md-column><span></span></th>
                             <th md-column md-order-by=""><span>Vencimento</span></th>
+                            <th md-column md-order-by=""><span>Valor</span></th>
                             <th md-column md-order-by=""><span>E-mail</span></th>
                             <th md-column md-order-by=""><span>Nome</span></th>
                             <th md-column md-order-by=""><span>CPF</span></th>
@@ -90,6 +92,7 @@
                                 </md-button>
                             </td>
                             <td md-cell>{{item.BOL_VENCIMENTO | date : 'dd/MM/yyyy'}}</td>
+                            <td md-cell>{{item.BOL_VALOR | currency}}</td>
                             <td md-cell>
                                 <div layout="row" layout-align="center center">
                                     <md-button ng-class="{'md-warn': !item.BOL_EMAIL_ENVIADO}" class="email-info">
@@ -113,7 +116,7 @@
                         </tr>
                     </tbody>
 
-                    <tbody md-body hide show-xs show-sm>
+                    <tbody md-body hide show-xs show-sm class="card">
                         <tr ng-disabled="true" md-row md-select="item" md-select-id="BOL_ID" ng-repeat="item in vm.boleto.data | orderBy: vm.boleto.order">
                             <td md-cell>
                                 <md-card>
@@ -125,7 +128,7 @@
                                             </tr>
                                             <tr>
                                                 <th md-order-by="">Valor</th>
-                                                <td>{{item.BOL_VALOR}}</td>
+                                                <td>{{item.BOL_VALOR | currency}}</td>
                                             </tr>
                                             <tr>
                                                 <th md-order-by="">Nome</th>
@@ -135,16 +138,16 @@
                                                 <th md-order-by="">CPF</th>
                                                 <td>{{item.BOL_CPF | brCpf}}</td>
                                             </tr>
-                                            <tr>
+                                            <!-- <tr>
                                                 <th md-order-by="">Código de barras</th>
                                                 <td>{{item.BOL_CODIGO_BARRA}}</td>
-                                            </tr>
+                                            </tr> -->
 
                                             <tr>
-                                                <th>E-mail</th>
-                                                <td>
+                                                <th>
                                                     <div layout="row" layout-align="start center">
                                                         <div ng-class="{'md-warn': !item.BOL_EMAIL_ENVIADO}" class="email-info">
+                                                            E-mail
                                                             <md-icon ng-if="!item.BOL_EMAIL_ENVIADO">
                                                                 warning
                                                             </md-icon>
@@ -154,9 +157,11 @@
                                                             <!-- to.do: <span ng-if="item.USU_EMAIL === ''">
                                                                 Cadastrar e-mail ng-show="!item.BOL_EMAIL_ENVIADO"
                                                             </span> -->
-                                                            {{item.USU_EMAIL}}
                                                         </div>
                                                     </div>
+                                                </th>
+                                                <td>
+                                                    {{item.USU_EMAIL}}
                                                 </td>
                                             </tr>
                                         </table>

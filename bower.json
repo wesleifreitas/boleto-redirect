@@ -44,10 +44,10 @@
     "jstree": "^3.3.3",
     "moment": "~2.18.1",
     "font-awesome": "~4.7.0",
-    "angular-ui-mask": "~1.8.7",
     "jquery": "~3.2.1",
     "angular-material-sidemenu": "https://github.com/wesleifreitas/angular-material-sidemenu.git#develop",
-    "ng-flow": "^2.7.7"
+    "ng-flow": "^2.7.7",
+    "ngMask": "angular-mask#^3.1.1"
   },
   "resolutions": {
     "jstree": "^3.3.3"

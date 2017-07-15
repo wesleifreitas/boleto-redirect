@@ -11,7 +11,7 @@
             'ngMaterial',
             'ngMessages',
             'ui.utils.masks',
-            'ui.mask',
+            'ngMask',
             'idf.br-filters',
             'ng-currency',
             'md.data.table',

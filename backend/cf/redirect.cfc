@@ -7,7 +7,7 @@
 		<cfset checkAuthentication()>
 	
 		<cftry>
-			<cfset SEND_EMAIL = true>
+			<cfset SEND_EMAIL = false>
 			<cfset email_enviado = 0>
 
 			<cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & 
@@ -146,6 +146,7 @@
 							,bol_codigo_barra
 							,bol_data
 							,bol_vencimento
+							,bol_valor
 							,bol_url
 							,bol_status
 							,bol_email_enviado
@@ -158,6 +159,7 @@
 							,<cfqueryparam value = "#codigoBarra#" CFSQLType = "CF_SQL_VARCHAR">
 							,GETDATE()
 							,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
+							,<cfqueryparam value = "#valor#" CFSQLType = "CF_SQL_FLOAT">
 							,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
 							,1
 							,#email_enviado#
@@ -205,6 +207,7 @@
 							,bol_codigo_barra
 							,bol_data
 							,bol_vencimento
+							,bol_valor
 							,bol_url
 							,bol_status
 							,bol_email_enviado
@@ -217,6 +220,7 @@
 							,<cfqueryparam value = "#codigoBarra#" CFSQLType = "CF_SQL_VARCHAR">
 							,GETDATE()
 							,<cfqueryparam value = "#vencimento#" CFSQLType = "CF_SQL_DATE">
+							,<cfqueryparam value = "#valor#" CFSQLType = "CF_SQL_FLOAT">
 							,<cfqueryparam value = "#diretorio.Directory#/#diretorio.Name#" CFSQLType = "CF_SQL_VARCHAR">
 							,1
 							,#email_enviado#						

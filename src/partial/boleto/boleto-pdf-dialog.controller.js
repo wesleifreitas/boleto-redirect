@@ -25,6 +25,7 @@
                     vm.pdfViewer = 'pdf-viewer/web/viewer.html?file=' + blobUrl;
 
                 }, function error(response) {
+                    $mdDialog.cancel();
                     console.error(response);
                 });
         }

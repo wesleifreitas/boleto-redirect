@@ -270,7 +270,7 @@
 			<cfset response["pdf"] = toBase64(binary)>		
 			
 			<cfcatch>				
-				<cfset responseError(400, cfcatch.message)>				
+				<cfset responseError(400, "PDF não disponível")>				
 			</cfcatch>	
 		</cftry>
 		
