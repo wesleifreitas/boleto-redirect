@@ -65,8 +65,13 @@
                             AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
                         </cfif>
                     ) AS count_menu
+
+                    ,componente.com_view
                 FROM
                     dbo.menu AS menu
+                
+                LEFT OUTER JOIN dbo.componente as componente
+                ON componente.com_id = menu.com_id
 
                 <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
                     INNER JOIN dbo.acesso AS acesso
@@ -86,15 +91,21 @@
             </cfquery>
             
 
-            <cfsavecontent variable = "pxMenu">
-                
+            <cfsavecontent variable = "navBar">               
                 <cfset getRecursiveNavBar(data = qMenu) />
-
             </cfsavecontent>
 
-            
-            <cfset response['navBar'] = '<md-menu-bar>#variables.pxMenu#</md-menu-bar>'>
+            <cfsavecontent variable = "sideMenu">               
+                <cfset getRecursiveNavBar(data = qMenu, sideMenu = true) />
+            </cfsavecontent>
 
+            <cfif IsDefined("url.sidemenu") AND url.sidemenu>
+                <cfset response['sideMenu'] = "<md-sidemenu>#sideMenu#</md-sidemenu>">
+                <!--- <cfset response['sideMenu'] = ConvertJsTreeXmlToStruct(xmlParse(response['navBar']), structnew())> --->
+            <cfelse>
+                <cfset response['navBar'] = "<md-menu-bar>#navBar#</md-menu-bar>">
+            </cfif>
+           
             <cfcatch>
 				<cfset responseError(400, cfcatch.detail)>
 			</cfcatch>	
@@ -118,7 +129,7 @@
             name="data"
             type="query"
             required="true"
-            hint="data dos menus"
+            hint=""
             />
     
         <cfargument
@@ -126,7 +137,15 @@
             type="numeric"
             required="false"
             default="0"
-            hint="ID do menu pai que o menu filho pertence"
+            hint=""
+            />
+
+        <cfargument
+            name="sideMenu"
+            type="boolean"
+            required="false"
+            default="false"
+            hint=""
             />
 
         <!--- Define o scope LOCAL --->
@@ -141,6 +160,7 @@
                 ,men_ordem
                 ,count_submenu
                 ,count_menu
+                ,com_view
             FROM
                 arguments.data
             WHERE
@@ -157,29 +177,15 @@
         <cfif LOCAL.qMenu.RecordCount>       
             <!--- Loop nos menus filhos --->
             <cfloop from="1" to="#LOCAL.qMenu.RecordCount#" index="i">
-                <!--- Possui submenu? --->
-                <cfif LOCAL.qMenu.count_submenu[i] GT 0>
-                    <!--- Verificar é menu base --->
-                    <cfif LOCAL.qMenu.men_idPai[i] EQ 0>
-                        <md-menu>
-                            <button ng-click="$mdOpenMenu()">
-                                #LOCAL.qMenu.men_nome[i]#
-                            </button>
-                            <md-menu-content>
-                            <!---
-                                Chamar função recursiva
-                            --->
-                            <cfset getRecursiveNavBar(
-                                data = arguments.data,
-                                men_idPai = LOCAL.qMenu.men_id[i]) />
-                            </md-menu-content>
-                        </md-menu>
-                    <cfelse>
-                        <md-menu-item>
+                <cfif not arguments.sideMenu>
+                    <!--- Possui submenu? --->
+                    <cfif LOCAL.qMenu.count_submenu[i] GT 0>
+                        <!--- Verificar é menu base --->
+                        <cfif LOCAL.qMenu.men_idPai[i] EQ 0>
                             <md-menu>
-                                <md-button ng-click="$mdOpenMenu()">
+                                <button ng-click="$mdOpenMenu()">
                                     #LOCAL.qMenu.men_nome[i]#
-                                </md-button>
+                                </button>
                                 <md-menu-content>
                                 <!---
                                     Chamar função recursiva
@@ -189,15 +195,68 @@
                                     men_idPai = LOCAL.qMenu.men_id[i]) />
                                 </md-menu-content>
                             </md-menu>
+                        <cfelse>
+                            <md-menu-item>
+                                <md-menu>
+                                    <md-button ng-click="$mdOpenMenu()">
+                                        #LOCAL.qMenu.men_nome[i]#
+                                    </md-button>
+                                    <md-menu-content>
+                                    <!---
+                                        Chamar função recursiva
+                                    --->
+                                    <cfset getRecursiveNavBar(
+                                        data = arguments.data,
+                                        men_idPai = LOCAL.qMenu.men_id[i]) />
+                                    </md-menu-content>
+                                </md-menu>
+                            </md-menu-item>
+                        </cfif>
+                    <!--- Verificar se possui idPai --->
+                    <cfelseif LOCAL.qMenu.men_idPai[i] GT 0>
+                        <md-menu-item>
+                            <md-button ng-click="showView('#LOCAL.qMenu.men_id[i]#')">
+                                #LOCAL.qMenu.men_nome[i]#
+                            </md-button>
                         </md-menu-item>
                     </cfif>
-                <!--- Verificar se possui idPai --->
-                <cfelseif LOCAL.qMenu.men_idPai[i] GT 0>
-                    <md-menu-item>
-                        <md-button ng-click="showView('#LOCAL.qMenu.men_id[i]#')">
-                            #LOCAL.qMenu.men_nome[i]#
-                        </md-button>
-                    </md-menu-item>
+                <cfelse> <!--- SIDE MENU --->
+                    <!--- Possui submenu? --->
+                    <cfif LOCAL.qMenu.count_submenu[i] GT 0>
+                        <!--- Verificar é menu base --->
+                        <cfif LOCAL.qMenu.men_idPai[i] EQ 0>
+                            <md-sidemenu-group>
+                                <md-sidemenu-content md-icon="" md-heading="#LOCAL.qMenu.men_nome[i]#" md-arrow="true">
+                                <!---
+                                    Chamar função recursiva
+                                --->
+                                <cfset getRecursiveNavBar(
+                                    data = arguments.data,
+                                    men_idPai = LOCAL.qMenu.men_id[i],
+                                    sideMenu = true) />
+                               
+                                </md-sidemenu-content>
+                             </md-sidemenu-group>
+                        <cfelse>
+                            <md-sidemenu-group>
+                                <md-sidemenu-content md-icon="" md-heading="#LOCAL.qMenu.men_nome[i]#" md-arrow="true">
+                                    <!---
+                                        Chamar função recursiva
+                                    --->
+                                    <cfset getRecursiveNavBar(
+                                        data = arguments.data,
+                                        men_idPai = LOCAL.qMenu.men_id[i],
+                                        sideMenu = true) />
+                                    </md-menu-content>
+                                </md-sidemenu-content>
+                             </md-sidemenu-group>
+                        </cfif>
+                    <!--- Verificar se possui idPai --->
+                    <cfelseif LOCAL.qMenu.men_idPai[i] GT 0>
+                        <md-sidemenu-button ui-sref="#LOCAL.qMenu.com_view#" ng-click="showView('#LOCAL.qMenu.com_view#')">
+                            #LOCAL.qMenu.men_nome[i]#                            
+                        </md-sidemenu-button>
+                    </cfif>
                 </cfif>
             </cfloop>
         </cfif>

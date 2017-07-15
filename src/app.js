@@ -17,6 +17,7 @@
             'md.data.table',
             'fixed.table.header',
             'angular-loading-bar',
+            'ngMaterialSidemenu',
             'flow'
         ])
         .config(config)
