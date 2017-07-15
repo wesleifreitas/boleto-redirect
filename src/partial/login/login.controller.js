@@ -67,7 +67,7 @@
                     //console.info(response);
 
                     if (response.data.success) {
-                        loginService.SetCredentials(vm.username, vm.passwordNew, response.data);
+                        loginService.SetCredentials(vm.username, vm.passwordNew, response);
                         $state.go('home');
                     } else {
                         vm.loginMessage = response.data.message;
