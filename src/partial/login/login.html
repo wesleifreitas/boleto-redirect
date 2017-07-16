@@ -52,9 +52,9 @@
 
                             <md-input-container class="md-block" flex-gt-sm="">
                                 <label>Nova Senha</label>
-                                <input id="usu_senha" name="passwordNew" ng-model="vm.passwordNew" required type="password" minlength="8">
+                                <input id="usu_senha" name="passwordNew" ng-model="vm.passwordNew" required type="password" minlength="3">
                                 <div ng-messages="loginForm.passwordNew.$error" multiple md-auto-hide="false">
-                                    <div ng-message="minlength">A senha deve ter no mínimo 8 caracteres</div>
+                                    <div ng-message="minlength">A senha deve ter no mínimo 3 caracteres</div>
                                 </div>
                             </md-input-container>
 
