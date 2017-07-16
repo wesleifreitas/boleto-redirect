@@ -17,19 +17,44 @@
              password: GetToken(authString, 2, ":"),
              setSession: false})>
 
-            <cfinvoke component="login" 
-                method="login" 
-                body="#body#"
-                returnVariable="response">
+        <cfinvoke component="login" 
+            method="login" 
+            body="#body#"
+            returnVariable="response">
 
-            <cfset response = DeserializeJSON(response)>
+        <cfset response = DeserializeJSON(response)>
 
-            <cfif not response.success>
-                <cfthrow errorcode="401" message="Usuário ou senha inválidos">
-            </cfif>  
+        <cfif not response.success>
+             <cfthrow errorcode="401" message="Usuário ou senha inválidos">
+        <cfelse>
+            <cfset perfilDeveloper = response.perfilDeveloper>
+        </cfif>
 
     <cfelseif not IsDefined("session.authenticated") OR not session.authenticated>
         <cfthrow errorcode="401" message="Usuário não autenticado ou sessão encerrada">
+    <cfelse>     
+        <cfset userId = GetPageContext().getRequest().getHeader("userId")>
+        <cfif isDefined("userId") AND userId NEQ session.userID>
+            <cfset responseError(401)>
+        </cfif>
+
+        <cfset perfilDeveloper = session.perfilDeveloper>
+    </cfif>
+
+    <cfset hasAcesso = true>
+    <!--- Verificar acesso ao state --->
+    <cfif not perfilDeveloper AND IsDefined("arguments.state")>        
+        <cfset hasAcesso = false>
+        <cfloop array="#arguments.state#" index="i">
+            <cfif ListContains(session.acesso, i) GT 0>
+                <cfset hasAcesso = true>
+                <cfbreak>
+            </cfif>
+        </cfloop>
+
+        <cfif not hasAcesso>
+            <cfset responseError(403, "Acesso proibido")>        
+        </cfif>
     </cfif>
 
 </cffunction>

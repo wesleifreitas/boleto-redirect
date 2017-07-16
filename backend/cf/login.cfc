@@ -98,8 +98,8 @@
                         <cfset session.grupoId = qLogin.grupo_id>    
                         <cfset session.grupoList = qLogin.perfil_grupo>
                         <cfset session.perfilId = qLogin.per_id>
-                        <cfset session.perfilPassageiro = qLogin.per_passageiro>
-                        <cfset session.acesso = arrayToList(acesso)>                           
+                        <cfset session.acesso = arrayToList(acesso)>   
+                        <cfset session.perfilPassageiro = qLogin.per_passageiro>                                                
                     </cflock>
                     <cfset response["session"] = session>
                 </cfif>
