@@ -10,6 +10,7 @@
         var vm = this;
         vm.init = init;
         vm.close = close;
+        vm.email = '';
         vm.numeral = numeral;
         vm.initFlow = initFlow;
         vm.setFlowOptions = setFlowOptions;
