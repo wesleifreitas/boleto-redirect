@@ -109,7 +109,7 @@
             </cfif>
 
             <cfset response["query"] = queryToArray(qLogin)>
-            
+            <cfset response["perfilDeveloper"] = qLogin.per_developer>
         
             <cfreturn SerializeJSON(response)>
 

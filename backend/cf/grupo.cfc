@@ -4,7 +4,7 @@
 
 	<cffunction name="grupo" access="remote" returntype="String" httpmethod="GET"> 
 
-		<cfset checkAuthentication(state = ['perfil-usuario'])>
+		<cfset checkAuthentication()>
         
 		<cfset response = structNew()>
 		
