@@ -7,6 +7,7 @@
     /* @ngInject */
     function LoginCtrl($rootScope, $scope, loginService, $state, $stateParams, $mdDialog) {
         var vm = this;
+        vm.init = init;
         vm.selection = 'default';
         vm.formTitle = 'Login';
         vm.loginMessage = '';
@@ -16,6 +17,12 @@
         vm.showLogin = showLogin;
         vm.showRecover = showRecover;
         vm.showNewUser = showNewUser;
+
+        function init() {
+            if ($stateParams.action.indexOf('username') > -1) {
+                vm.username = $stateParams.action.split('username:')[1];
+            }
+        }
 
         function login() {
             if (vm.selection === 'default') {
