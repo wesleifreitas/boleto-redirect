@@ -1,15 +1,16 @@
 <!---
-<cfset path = "">
+<cfset path = getDirectoryFromPath(getCurrentTemplatePath())>
 <cfset restDeleteApplication(path)>
 <cfabort>
 --->
 
+
 <cftry>
 	<cfset path = getDirectoryFromPath(getCurrentTemplatePath())>
-	<cfset restInitApplication(path, "px-boleto-redirect")>	
+	<cfset restInitApplication(path, "boleto-redirect")>	
 	<cfoutput>Success! 'rest-cf-init'</cfoutput>	
 	<cfcatch type="any">
-		<!--- <cfdump var="#cfcatch#"> --->
+		<cfdump var="#cfcatch#">
 	    <cfoutput>Error    'rest-cf-init' #cfcatch.Cause.Cause.Detail# | #cfcatch.detail#</cfoutput>
 		<!--- <cfoutput>restInitApplication fault | #cfcatch.message# | #cfcatch.detail#</cfoutput> --->
 	    <cfabort>
