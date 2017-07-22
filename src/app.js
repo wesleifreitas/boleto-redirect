@@ -36,8 +36,8 @@
     angular.module(PROJECT_NAME).constant('config', {
         'DEMO': DEMO,
         // RESTful - ColdFusion
-        // Registrar REST: http://localhost:8500/px-boleto-redirect/backend/cf/restInit.cfm
-        'REST_URL': window.location.origin + '/rest/px-boleto-redirect',
+        // Registrar REST: http://localhost:8500/boleto-redirect/backend/cf/restInit.cfm
+        'REST_URL': window.location.origin + '/rest/boleto-redirect',
     });
 
     config.$inject = ['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$mdDateLocaleProvider',
