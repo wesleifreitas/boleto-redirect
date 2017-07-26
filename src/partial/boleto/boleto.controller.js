@@ -23,6 +23,7 @@
             total: 0
         };
         vm.showPdf = showPdf;
+        vm.setEmail = setEmail;
 
         // $on
         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope
@@ -138,6 +139,26 @@
                 controller: 'BoletoPDfDialogCtrl',
                 controllerAs: 'vm',
                 templateUrl: 'partial/boleto/boleto-pdf-dialog.html',
+                parent: angular.element(document.body),
+                //targetEvent: event,
+                clickOutsideToClose: false
+            }).then(function(data) {
+
+            });
+        }
+
+        // salvar e enviar e-mail
+        function setEmail(item) {
+            var locals = {
+                item: item
+            };
+
+            $mdDialog.show({
+                locals: locals,
+                preserveScope: true,
+                controller: 'BoletoEmailDialogCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'partial/boleto/boleto-email-dialog.html',
                 parent: angular.element(document.body),
                 //targetEvent: event,
                 clickOutsideToClose: false

@@ -112,7 +112,7 @@
 							<cfoutput>								
 								<p><b>Este é um e-mail automático, não responda.</b></p>								
 								<p>
-									<b>Olá #qUsuario.usu_nome#.</b>
+									Olá <b>#qUsuario.usu_nome#.</b>
 								</p>
 								<p>
 									Em anexo seu boleto referente ao serviço de fretamento Expresso Mauá.

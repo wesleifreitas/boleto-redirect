@@ -278,4 +278,120 @@
 
 	</cffunction>
 
+	<cffunction name="setUserEmail" access="remote" returnType="String" httpMethod="PUT" restpath="/user-email">		
+		<cfargument name="body" type="String">
+
+		<cfset checkAuthentication(state = ['boleto'])>
+		
+		<cfset body = DeserializeJSON(arguments.body)>
+		
+		<cfset response = structNew()>
+		<cfset response["arguments"] = arguments>
+
+		<cftry>
+			<cfquery datasource="#application.datasource#">
+				UPDATE 
+					dbo.usuario  
+				SET 
+					usu_email = <cfqueryparam value = "#body.email#" CFSQLType = "CF_SQL_VARCHAR">
+				WHERE 
+					usu_id = <cfqueryparam value = "#body.userId#" CFSQLType = "CF_SQL_NUMERIC">
+				;
+				UPDATE 
+					dbo.boleto  
+				SET 
+					bol_email = <cfqueryparam value = "#body.email#" CFSQLType = "CF_SQL_VARCHAR">
+				WHERE 
+					bol_id = <cfqueryparam value = "#body.boletoId#" CFSQLType = "CF_SQL_NUMERIC">
+			</cfquery>
+
+			<cfset sendUserEmail(SerializeJSON(body))>
+			
+			<cfcatch>				
+				<cfset responseError(400, cfcatch.message)>				
+			</cfcatch>	
+		</cftry>
+		
+		<cfreturn SerializeJSON(response)>
+
+	</cffunction>
+
+	<cffunction name="sendUserEmail" access="remote" returnType="String" httpMethod="POST" restpath="/user-email">		
+		<cfargument name="body" type="String">
+
+		<cfset checkAuthentication(state = ['boleto'])>
+		
+		<cfset body = DeserializeJSON(arguments.body)>
+		
+		<cfset response = structNew()>
+		<cfset response["arguments"] = arguments>
+
+		<cftry>
+			<cftransaction>	
+				<cfquery name="qSMTP" datasource="#application.datasource#">
+					SELECT 
+						smtp_server
+						,smtp_username
+						,smtp_password
+						,smtp_port
+					FROM 
+						dbo.smtp
+				</cfquery>	
+
+				<cfquery datasource="#application.datasource#" name="query">
+					SELECT
+						boleto.bol_email
+						,boleto.bol_url
+						,usuario.usu_nome
+					FROM
+						dbo.boleto AS boleto
+					
+					INNER JOIN dbo.usuario AS usuario
+					ON usuario.usu_id = boleto.usu_id
+				</cfquery>
+			</cftransaction>
+
+			<cfquery datasource="#application.datasource#">
+				UPDATE 
+					dbo.boleto  
+				SET 
+					bol_email_enviado = 1
+				WHERE 
+					bol_id = <cfqueryparam value = "#body.boletoId#" CFSQLType = "CF_SQL_NUMERIC">
+			</cfquery>
+
+			<cfmail from="#qSMTP.smtp_username#"
+				type="html"
+				to="#query.bol_email#"		
+				subject="[px-project] Boleto"
+				server="#qSMTP.smtp_server#"
+				username="#qSMTP.smtp_username#" 
+				password="#qSMTP.smtp_password#"
+				port="#qSMTP.smtp_port#">
+
+				<cfmailparam file="#query.bol_url#">
+				
+				<cfoutput>								
+					<p><b>Este é um e-mail automático, não responda.</b></p>								
+					<p>
+						Olá <b>#query.usu_nome#.</b>
+					</p>
+					<p>
+						Em anexo seu boleto referente ao serviço de fretamento Expresso Mauá.
+					</p>
+					<p>
+						Confira seu nome e CPF no boleto.
+					</p>
+					<p><b>Este é um e-mail automático, não responda.</b></p>
+				</cfoutput>	
+			</cfmail>
+			
+			<cfcatch>				
+				<cfset responseError(400, cfcatch.message)>				
+			</cfcatch>	
+		</cftry>
+		
+		<cfreturn SerializeJSON(response)>
+
+	</cffunction>
 </cfcomponent>

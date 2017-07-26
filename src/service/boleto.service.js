@@ -17,6 +17,8 @@
         service.remove = remove;
         service.removeById = removeById;
         service.pdf = pdf;
+        service.setEmail = setEmail;
+        service.sendEmail = sendEmail;
 
         return service;
 
@@ -128,6 +130,37 @@
             return req;
         }
 
+        function setEmail(data) {
+
+            var req = $http({
+                    url: config.REST_URL + '/boleto/user-email',
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': '',
+                        'Content-Type': 'application/json'
+                    },
+                    data: data
+                })
+                .then(handleSuccess, handleError);
+
+            return req;
+        }
+
+        function sendEmail(data) {
+
+            var req = $http({
+                    url: config.REST_URL + '/boleto/user-email',
+                    method: 'POST',
+                    headers: {
+                        'Authorization': '',
+                        'Content-Type': 'application/json'
+                    },
+                    data: data
+                })
+                .then(handleSuccess, handleError);
+
+            return req;
+        }
         // private functions
 
         function handleSuccess(response) {

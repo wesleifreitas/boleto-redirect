@@ -27,7 +27,7 @@
         output="false"
         hint="I run when the application boots up. If I return false, the application initialization will hault.">
 
-        <cfset application.datasource = "fretado_sql">
+        <cfset application.datasource = "fretado_sql_local">
 
         <cfreturn true />
     </cffunction>

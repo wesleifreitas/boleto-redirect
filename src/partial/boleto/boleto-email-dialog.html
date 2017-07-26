@@ -1,0 +1,37 @@
+<md-dialog flex="50" flex-xs="100" aria-label="" ng-cloak ng-init="vm.init()">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Atualizar e-mail</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="fa fa-close"></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-content class="content">
+            <form name="form">
+                <div layout="row" layout-padding>
+                    <md-input-container class="md-block" flex>
+                        <label>E-mail:</label>
+                        <input type="email" name="email" ng-model="vm.email" required>
+                        <div ng-messages="form.email.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                            <div ng-message="email">E-mail inválido.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </form>
+        </md-content>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <md-button ng-click="vm.cancel()">
+            Cancelar
+        </md-button>
+        <md-button ng-click="vm.save()" ng-disabled="form.$invalid || vm.loading">
+            <md-icon>email</md-icon>
+            Enviar e-mail
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

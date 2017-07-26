@@ -95,7 +95,7 @@
                             <td md-cell>{{item.BOL_VALOR | currency}}</td>
                             <td md-cell>
                                 <div layout="row" layout-align="center center">
-                                    <md-button ng-class="{'md-warn': !item.BOL_EMAIL_ENVIADO}" class="email-info">
+                                    <md-button ng-class="{'md-warn': !item.BOL_EMAIL_ENVIADO}" class="email-info" ng-click="vm.setEmail(item)">
                                         <md-icon ng-if="!item.BOL_EMAIL_ENVIADO">
                                             warning
                                         </md-icon>
