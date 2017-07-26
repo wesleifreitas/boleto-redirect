@@ -72,7 +72,7 @@ gulp.task('watch', function() {
 
 var requestCount = 0;
 gulp.task('rest-cf-init', function() {
-    var url = 'http://localhost:8500/px-boleto-redirect/backend/cf/rest-init.cfm'
+    var url = 'http://localhost:8500/boleto-redirect/backend/cf/rest-init.cfm'
     request(url, function(error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log('[' + moment().format('HH:mm:ss') + ']', body);
