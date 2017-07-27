@@ -306,6 +306,8 @@
 			</cfquery>
 
 			<cfset sendUserEmail(SerializeJSON(body))>
+			<cfset response["success"] = true>
+			<cfset response["message"] = 'E-mail enviado com sucesso!'>
 			
 			<cfcatch>				
 				<cfset responseError(400, cfcatch.message)>				
@@ -343,6 +345,7 @@
 						boleto.bol_email
 						,boleto.bol_url
 						,usuario.usu_nome
+						,usuario.usu_login
 					FROM
 						dbo.boleto AS boleto
 					
@@ -351,7 +354,6 @@
 
 					WHERE 
 						bol_id = <cfqueryparam value = "#body.boletoId#" CFSQLType = "CF_SQL_NUMERIC">
-
 				</cfquery>
 			</cftransaction>
 
@@ -367,7 +369,7 @@
 			<cfmail from="#qSMTP.smtp_username#"
 				type="html"
 				to="#query.bol_email#"		
-				subject="[px-project] Boleto"
+				subject="[Expresso Mauá] Boleto"
 				server="#qSMTP.smtp_server#"
 				username="#qSMTP.smtp_username#" 
 				password="#qSMTP.smtp_password#"
@@ -385,6 +387,11 @@
 					</p>
 					<p>
 						Confira seu nome e CPF no boleto.
+					</p>
+					<p>
+						<a href="http://expressomaua.pxproject.com.br/##!/login/username:#query.usu_login#">
+							Acessar boleto pelo sistema
+						</a>
 					</p>
 					<p><b>Este é um e-mail automático, não responda.</b></p>
 				</cfoutput>	
