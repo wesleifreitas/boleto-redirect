@@ -43,7 +43,7 @@
                 vm.filter[$state.current.url.split('/')[1]] = true;
                 vm.filter.months = moment.months();
                 vm.filter.ano = vm.filter.ano || moment().year();
-                vm.filter.mes = vm.filter.mes || moment().month();
+                vm.filter.mes = vm.filter.mes || moment().month() + 1;
             }
 
             getData({ reset: true });
