@@ -15,6 +15,9 @@
 
         function init(event) {
             //console.info('locals', locals);
+            if (locals.item.USU_EMAIL !== '') {
+                vm.email = locals.item.USU_EMAIL;
+            }
         }
 
         function save() {
