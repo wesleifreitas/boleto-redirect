@@ -348,6 +348,10 @@
 					
 					INNER JOIN dbo.usuario AS usuario
 					ON usuario.usu_id = boleto.usu_id
+
+					WHERE 
+						bol_id = <cfqueryparam value = "#body.boletoId#" CFSQLType = "CF_SQL_NUMERIC">
+
 				</cfquery>
 			</cftransaction>
 
